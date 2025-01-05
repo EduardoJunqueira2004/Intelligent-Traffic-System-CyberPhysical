@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitorização e Análise de Tráfego Urbano</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e0e0e0;
+            color: #000;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .header, .data-display, .button-container {
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+        }
+        .header {
+            background-color: #00ff00;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .data-display {
+            background-color: #00ff00;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+        .button-container {
+            background-color: #ff0000;
+            text-align: center;
+        }
+        .button-container button {
+            background-color: transparent;
+            color: white;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: white;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Sistema Inteligente de Monitorização e Análise de Tráfego Urbano
+    </div>
+
+    <!-- MOstrar dados -->
+    <div class="data-display" id="data-display">
+        Dados do Servidor irão aparecer aqui neste campo
+    </div>
+
+    <!-- Botão para enviar dados -->
+    <div class="button-container">
+        <button id="toggle-light" onclick="sendPostRequest()">Botão</button>
+    </div>
+
+    <script>
+        // Função GET
+        async function fetchData() {
+            try {
+                const response = await fetch('http://192.168.255.5:8080/dados');
+                const data = await response.json();
+
+                const display = document.getElementById('data-display');
+                if (data.length === 0) {
+                    display.innerText = 'Nenhum dado disponível.';
+                } else {
+                    display.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                }
+            } catch (error) {
+                console.error('Erro ao encontrar dados:', error);
+                document.getElementById('data-display').innerText = 'Erro ao carregar os dados.';
+            }
+        }
+        //
+        async function sendPostRequest() {
+            const payload = {
+                state: 'GREEN', // Alternar o estado desejado aqui
+                touchCount: 1,
+                totalTouchTime: 0,
+            };
+        
+            try {
+                const response = await fetch('http://192.168.255.5:8080/dados', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+        
+                if (response.ok) {
+                    alert('Dados enviados com sucesso!');
+                    fetchData(); // Atualiza os dados exibidos
+                } else {
+                    alert('Erro ao enviar dados.');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar dados:', error);
+                alert('Erro ao conectar ao servidor.');
+            }
+        }
+        
+
+        // Carregar dados do servidor ao iniciar a página
+        window.onload = fetchData;
+    </script>
+</body>
+</html>

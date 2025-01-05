@@ -1,0 +1,2 @@
+Objetivo da API: 
+-Mandar e receber dados! atarvés de GETS e POST 

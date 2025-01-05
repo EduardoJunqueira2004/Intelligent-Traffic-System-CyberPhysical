@@ -1,0 +1,7 @@
+Objetivo da API: 
+-Mandar e receber dados! atarvés de GETS e POSTS apenas
+-Enviar e receber dados em formato JSON
+
+No Mockup:
+Titulo Inicio da página HTML:Sistema Inteligente de Monitorização e Análise de Tráfego humano só texto mesmo.
+Dados do Servidor 

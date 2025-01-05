@@ -1,0 +1,12 @@
+Objetivo da API: 
+-Mandar e receber dados! atarvés de GETS e POSTS apenas
+-Enviar e receber dados em formato JSON
+
+No Mockup:
+Titulo--> Inicio da página HTML:Sistema Inteligente de Monitorização e Análise de Tráfego humano só texto mesmo.
+Dados do Servidor--> Centro da página HTML:Aqui ele vai receber apenas dados função get onde vai receber dados em formato JSON que vão ser mostrados na página.Estes dados vão ser mostrados num formato de tabela ou formato de texto ou formato de gráfico(á tua escolha).
+Botão--> Fim da página  HTML:função post de dados, sempre que o botão for clicado faz um post de dados em formato JSON para o servidor. Neste caso para alterar o semáforo de vermelho para verde ou vice-versa.
+
+Funções que tenho no backend e que estão presentes aqui para integrar:
+//Função para enviar dados do semáforo via HTTP.
+//Função para verificar o sensor de toque quer seja o físico quer seja o virtual(da API).
