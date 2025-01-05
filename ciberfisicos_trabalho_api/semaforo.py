@@ -1,45 +1,33 @@
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
 
 app = Flask(__name__, static_folder=".")
-CORS(app)
 
-# Estado inicial do semáforo
-traffic_light_state = {
-    "state": "OFF",
-    "touchCount": 0,
-    "totalTouchTime": 0
-}
+# Lista para armazenar todos os dados recebidos
+traffic_data_list = []
 
 # Rota para servir o HTML da interface
 @app.route('/')
 def serve_html():
-    return send_from_directory(".", "interface.html")  # Certifique-se de que o HTML está na mesma pasta que este script
+    return send_from_directory(app.static_folder, "interface.html")
 
-# Rota para obter os dados do semáforo
+# Rota para obter todos os dados recebidos
 @app.route('/api/dados', methods=['GET'])
 def get_traffic_data():
-    return jsonify(traffic_light_state)
+    return jsonify(traffic_data_list)
 
 # Rota para atualizar o estado do semáforo
 @app.route('/api/dados', methods=['POST'])
 def update_traffic_state():
-    global traffic_light_state
+    global traffic_data_list
     data = request.get_json()
 
-    if "state" in data:
-        if data["state"] == "NEXT":
-            # Alternar para o próximo estado
-            if traffic_light_state["state"] == "RED":
-                traffic_light_state["state"] = "GREEN"
-            elif traffic_light_state["state"] == "GREEN":
-                traffic_light_state["state"] = "YELLOW"
-            elif traffic_light_state["state"] == "YELLOW":
-                traffic_light_state["state"] = "RED"
-            else:
-                traffic_light_state["state"] = "OFF"
-    
-    response = {"message": "Estado atualizado com sucesso!", "next_state": "NEXT"}
+    # Validar se os dados enviados estão corretos
+    if "state" in data and "touchCount" in data and "totalTouchTime" in data:
+        traffic_data_list.append(data)  # Adicionar os dados recebidos à lista
+        response = {"message": "Dados recebidos com sucesso!", "next_state": "NEXT"}
+    else:
+        response = {"message": "Erro: Dados inválidos recebidos."}
+
     return jsonify(response)
 
 # Inicializar o servidor

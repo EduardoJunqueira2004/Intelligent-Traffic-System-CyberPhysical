@@ -26,12 +26,18 @@
         }
         .data-display {
             background-color: #00ff00;
-            height: 150px;
+            height: 150px; /* Mantém a altura fixa */
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 18px;
+            overflow-y: auto; /* Adiciona barra de rolagem vertical, se necessário */
+            text-align: left; /* Alinha o texto à esquerda */
+            padding: 10px; /* Dá um espaçamento interno para os dados */
+            border: 2px solid black; /* Adiciona uma borda para separar visualmente */
+            box-sizing: border-box; /* Inclui o padding dentro da altura e largura */
         }
+        
         .button-container {
             background-color: #ff0000;
             text-align: center;
@@ -74,18 +80,19 @@
                 const data = await response.json();
         
                 const display = document.getElementById('data-display');
-                display.innerHTML = `
-                    <ul>
-                        <li>Estado: ${data.state}</li>
-                        <li>Touch Count: ${data.touchCount}</li>
-                        <li>Total Touch Time: ${data.totalTouchTime}</li>
-                    </ul>
-                `;
+                display.innerHTML = `<ul>${data
+                    .map(item => `
+                        <li>Estado: ${item.state}</li>
+                        <li>Touch Count: ${item.touchCount}</li>
+                        <li>Total Touch Time: ${item.totalTouchTime}</li>
+                        <br>
+                    `).join('')}</ul>`;
             } catch (error) {
                 console.error('Erro ao encontrar dados:', error);
                 document.getElementById('data-display').innerText = 'Erro ao carregar os dados.';
             }
         }
+        
         
         // Função POST
         async function sendPostRequest() {
